@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Dijital Sergi</title>
+    <!-- Google Model-Viewer Kütüphanesi -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <style>
+        body { margin: 0; padding: 0; background-color: #222; overflow: hidden; font-family: sans-serif; }
+        /* Modeli tam ekran yapıyoruz */
+        model-viewer { width: 100vw; height: 100vh; }
+        
+        /* Kullanıcıyı yönlendiren bilgi metni */
+        #bilgi-kutusu {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9); color: #000;
+            padding: 12px 24px; border-radius: 30px; 
+            font-weight: bold; pointer-events: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- AR ve 360 Dönme Özellikli 3D Gösterici -->
+    <model-viewer 
+        id="ar-sahne"
+        camera-controls 
+        auto-rotate 
+        ar 
+        ar-modes="webxr scene-viewer quick-look"
+        shadow-intensity="1.5"
+        exposure="1.2">
+    </model-viewer>
+    
+    <div id="bilgi-kutusu">Model Yükleniyor...</div>
+
+    <script>
+        // 1. URL'den 'id' değerini al (Örn: ?id=tugla_kalp)
+        const urlParams = new URLSearchParams(window.location.search);
+        const modelId = urlParams.get('id');
+        
+        const viewer = document.getElementById('ar-sahne');
+        const bilgi = document.getElementById('bilgi-kutusu');
+
+        // 2. Doğru 3D Modeli Yükle
+        if (modelId) {
+            viewer.src = `assets/${modelId}.glb`;
+            bilgi.innerText = "360° inceleyin veya AR'da görün!";
+        } else {
+            bilgi.innerText = "Lütfen sergideki bir QR kodu okutun.";
+        }
+
+        // 3. Dokunma (Tıklama) Etkileşimi
+        viewer.addEventListener('click', () => {
+            // Modeli tıklayınca bir ses çalmak için (assets klasörüne ses.mp3 eklerseniz):
+            // const ses = new Audio('assets/ses.mp3');
+            // ses.play();
+            
+            // Kullanıcıya küçük bir bildirim gösterelim
+            bilgi.innerText = "Tebrikler! Etkileşim başarılı.";
+            setTimeout(() => { bilgi.innerText = "360° inceleyin veya AR'da görün!"; }, 3000);
+        });
+    </script>
+</body>
+</html>
