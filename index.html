@@ -9,7 +9,6 @@
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     
     <style>
-        /* Genel Sayfa Ayarları */
         body { 
             margin: 0; 
             padding: 0; 
@@ -18,34 +17,36 @@
             font-family: sans-serif; 
         }
         
-        /* En Alttaki Bilgi Kutusu */
+        /* Metin Taşma Sorunu Giderildi: max-width ve font-size optimize edildi */
         #bilgi-kutusu {
             position: absolute; 
-            bottom: 30px; 
+            bottom: 25px; 
             left: 50%; 
             transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.9); 
+            background: rgba(255, 255, 255, 0.95); 
             color: #000;
-            padding: 12px 24px; 
-            border-radius: 30px; 
-            font-weight: bold; 
+            padding: 10px 18px; 
+            border-radius: 20px; 
+            font-weight: 600; 
+            font-size: 13px;
             pointer-events: none;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             z-index: 10;
             text-align: center;
-            width: max-content;
+            max-width: 90%;
+            white-space: normal;
         }
 
-        /* AR Butonu (Bilgi kutusunun ÜZERİNE, boşluk bırakarak taşındı) */
+        /* AR Butonu Hizalaması */
         #ar-button {
             position: absolute; 
-            bottom: 90px; /* Üst üste binmeyi engellemek için değer artırıldı */
+            bottom: 85px; 
             left: 50%; 
             transform: translateX(-50%);
-            background-color: #007bff; /* Dikkat çekmesi için mavi yapıldı */
+            background-color: #007bff; 
             color: white;
             border-radius: 8px; 
-            padding: 12px 24px;
+            padding: 10px 20px;
             font-weight: bold; 
             font-family: sans-serif; 
             cursor: pointer; 
@@ -54,56 +55,49 @@
             z-index: 10;
         }
         
-        /* Kullanıcıyı Yönlendiren Animasyonlu İpucu */
+        /* Üst Yönlendirme İpucu */
         #ipucu-kutusu {
             position: absolute;
-            top: 20px;
+            top: 15px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-size: 12px;
             text-align: center;
             z-index: 10;
             pointer-events: none;
-            animation: fadeInOut 5s forwards; /* 5 saniye sonra kaybolur */
-        }
-        
-        @keyframes fadeInOut {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; display: none; }
+            width: 85%;
         }
 
-        /* MOBİL UYUMLU DOKUNMATİK NOKTALAR (44x44px) */
+        /* MOBİL UYUMLU DOKUNMATİK NOKTALAR */
         .Hotspot {
             display: block; 
             width: 44px; 
             height: 44px; 
             border-radius: 50%;
             border: 3px solid #ffffff; 
-            background-color: rgba(200, 0, 0, 0.8);
+            background-color: rgba(200, 0, 0, 0.85);
             box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
             cursor: pointer; 
             outline: none;
         }
 
-        /* BİLGİ BALONCUĞU METNİ */
+        /* BİLGİ BALONCUĞU */
         .HotspotAnnotation {
             position: absolute; 
-            top: -60px; 
+            top: -55px; 
             left: 50%; 
             transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.9); 
             color: #fff; 
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-radius: 8px; 
-            font-size: 16px; 
+            font-size: 14px; 
             width: max-content; 
-            max-width: 250px;
+            max-width: 220px;
             white-space: normal; 
             pointer-events: none;
             opacity: 0; 
@@ -111,7 +105,6 @@
             transition: opacity 0.3s ease-in-out;
         }
 
-        /* Mobilde butona dokunulduğunda metni göster */
         .Hotspot:focus .HotspotAnnotation,
         .Hotspot:active .HotspotAnnotation {
             opacity: 1; 
@@ -121,11 +114,11 @@
 </head>
 <body>
 
-<!-- Ekranın Üstündeki Yönlendirme Metni -->
-<div id="ipucu-kutusu">Modeli parmağınızla döndürebilir, kırmızı noktalara dokunarak bilgi alabilirsiniz.</div>
+<div id="ipucu-kutusu">Modeli döndürün, kırmızı noktalara dokunarak inceleyin.</div>
 
-<!-- 3D Sahne ve Model Yükleme -->
+<!-- 3D Sahne -->
 <model-viewer 
+    id="ar-sahne"
     src="assets/renklikalp.glb" 
     style="width: 100vw; height: 100vh;"
     ar 
@@ -136,28 +129,28 @@
     exposure="1.2" 
     shadow-intensity="1">
     
-    <!-- Etkileşimli Noktalar -->
     <button class="Hotspot" slot="hotspot-1" data-position="-0.10571576626445855m 0.40000702011549927m 0.057633221900686316m" data-normal="-0.7285922970594364m -0.31771914021612574m 0.6068012958176506m">
-        <div class="HotspotAnnotation">1. Bölüm</div>
-    </button>
-    <button class="Hotspot" slot="hotspot-2" data-position="0.164875577295869m 0.19798462246435022m 0.13380936629230766m" data-normal="0.31501005293120066m 0.9080127962915654m 0.2761909273003991m">
-        <div class="HotspotAnnotation">2. Bölüm</div>
-    </button>
-    <button class="Hotspot" slot="hotspot-3" data-position="0.032028800303243954m 0.20084505253255147m -0.21156466090353998m" data-normal="0.6837490947219559m 0.24938585056564644m -0.6857797554642124m">
-        <div class="HotspotAnnotation">3. Bölüm</div>
-    </button>
-    <button class="Hotspot" slot="hotspot-4" data-position="-0.04455793006609626m 0.40367757094254864m -0.04451800243573645m" data-normal="-0.3051802688264568m 0.907471420548707m 0.2887224002503501m">
-        <div class="HotspotAnnotation">4. Bölüm</div>
+        <div class="HotspotAnnotation">1. Bölüm: Aort Damarı</div>
     </button>
     
-    <!-- AR'da Gör Butonu -->
+    <button class="Hotspot" slot="hotspot-2" data-position="0.164875577295869m 0.19798462246435022m 0.13380936629230766m" data-normal="0.31501005293120066m 0.9080127962915654m 0.2761909273003991m">
+        <div class="HotspotAnnotation">2. Bölüm: Sağ Karıncık</div>
+    </button>
+    
+    <button class="Hotspot" slot="hotspot-3" data-position="0.032028800303243954m 0.20084505253255147m -0.21156466090353998m" data-normal="0.6837490947219559m 0.24938585056564644m -0.6857797554642124m">
+        <div class="HotspotAnnotation">3. Bölüm: Sol Kulakçık</div>
+    </button>
+    
+    <button class="Hotspot" slot="hotspot-4" data-position="-0.04455793006609626m 0.40367757094254864m -0.04451800243573645m" data-normal="-0.3051802688264568m 0.907471420548707m 0.2887224002503501m">
+        <div class="HotspotAnnotation">4. Bölüm: Pulmoner Arter</div>
+    </button>
+    
     <button slot="ar-button" id="ar-button">
         Odaya Yerleştir (AR)
     </button>
 </model-viewer>
     
-<!-- Sabit Bilgi Kutusu -->
-<div id="bilgi-kutusu">Gerçek boyutta görmek için "Odaya Yerleştir" butonuna basın.</div>
+<div id="bilgi-kutusu">Gerçek boyutta görmek için butona basın.</div>
 
 </body>
 </html>
