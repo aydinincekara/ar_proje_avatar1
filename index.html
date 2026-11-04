@@ -36,21 +36,46 @@
             width: max-content;
         }
 
-        /* AR Butonu (Bilgi kutusunun üzerine taşındı) */
+        /* AR Butonu (Bilgi kutusunun ÜZERİNE, boşluk bırakarak taşındı) */
         #ar-button {
             position: absolute; 
-            bottom: 90px; 
+            bottom: 90px; /* Üst üste binmeyi engellemek için değer artırıldı */
             left: 50%; 
             transform: translateX(-50%);
-            background-color: white; 
+            background-color: #007bff; /* Dikkat çekmesi için mavi yapıldı */
+            color: white;
             border-radius: 8px; 
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-weight: bold; 
             font-family: sans-serif; 
             cursor: pointer; 
             border: none;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             z-index: 10;
+        }
+        
+        /* Kullanıcıyı Yönlendiren Animasyonlu İpucu */
+        #ipucu-kutusu {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+            animation: fadeInOut 5s forwards; /* 5 saniye sonra kaybolur */
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; display: none; }
         }
 
         /* MOBİL UYUMLU DOKUNMATİK NOKTALAR (44x44px) */
@@ -96,7 +121,10 @@
 </head>
 <body>
 
-<!-- 3D Sahne ve Model Yükleme (Tam Ekran) -->
+<!-- Ekranın Üstündeki Yönlendirme Metni -->
+<div id="ipucu-kutusu">Modeli parmağınızla döndürebilir, kırmızı noktalara dokunarak bilgi alabilirsiniz.</div>
+
+<!-- 3D Sahne ve Model Yükleme -->
 <model-viewer 
     src="assets/renklikalp.glb" 
     style="width: 100vw; height: 100vh;"
@@ -108,34 +136,28 @@
     exposure="1.2" 
     shadow-intensity="1">
     
-    <!-- Etkileşimli Nokta 1 -->
+    <!-- Etkileşimli Noktalar -->
     <button class="Hotspot" slot="hotspot-1" data-position="-0.10571576626445855m 0.40000702011549927m 0.057633221900686316m" data-normal="-0.7285922970594364m -0.31771914021612574m 0.6068012958176506m">
         <div class="HotspotAnnotation">1. Bölüm</div>
     </button>
-    
-    <!-- Etkileşimli Nokta 2 -->
     <button class="Hotspot" slot="hotspot-2" data-position="0.164875577295869m 0.19798462246435022m 0.13380936629230766m" data-normal="0.31501005293120066m 0.9080127962915654m 0.2761909273003991m">
         <div class="HotspotAnnotation">2. Bölüm</div>
     </button>
-    
-    <!-- Etkileşimli Nokta 3 -->
     <button class="Hotspot" slot="hotspot-3" data-position="0.032028800303243954m 0.20084505253255147m -0.21156466090353998m" data-normal="0.6837490947219559m 0.24938585056564644m -0.6857797554642124m">
         <div class="HotspotAnnotation">3. Bölüm</div>
     </button>
-    
-    <!-- Etkileşimli Nokta 4 -->
     <button class="Hotspot" slot="hotspot-4" data-position="-0.04455793006609626m 0.40367757094254864m -0.04451800243573645m" data-normal="-0.3051802688264568m 0.907471420548707m 0.2887224002503501m">
         <div class="HotspotAnnotation">4. Bölüm</div>
     </button>
     
     <!-- AR'da Gör Butonu -->
     <button slot="ar-button" id="ar-button">
-        AR'da Gör
+        Odaya Yerleştir (AR)
     </button>
 </model-viewer>
     
 <!-- Sabit Bilgi Kutusu -->
-<div id="bilgi-kutusu">360° inceleyin veya AR'da görün!</div>
+<div id="bilgi-kutusu">Gerçek boyutta görmek için "Odaya Yerleştir" butonuna basın.</div>
 
 </body>
 </html>
