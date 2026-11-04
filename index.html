@@ -6,33 +6,64 @@
     <title>AR Dijital Sergi</title>
     <!-- Google Model-Viewer Kütüphanesi -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    
     <style>
         body { margin: 0; padding: 0; background-color: #222; overflow: hidden; font-family: sans-serif; }
-        /* Modeli tam ekran yapıyoruz */
-        model-viewer { width: 100vw; height: 100vh; }
         
-        /* Kullanıcıyı yönlendiren bilgi metni */
+        /* Bilgi ve Yükleme Kutusu */
         #bilgi-kutusu {
             position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.9); color: #000;
             padding: 12px 24px; border-radius: 30px; 
             font-weight: bold; pointer-events: none;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+
+        /* MOBİL UYUMLU DOKUNMATİK NOKTALAR (44x44px) */
+        .Hotspot {
+            display: block; width: 44px; height: 44px; border-radius: 50%;
+            border: 3px solid #ffffff; background-color: rgba(200, 0, 0, 0.8);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); cursor: pointer; outline: none;
+        }
+
+        /* BİLGİ BALONCUĞU METNİ */
+        .HotspotAnnotation {
+            position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9); color: #fff; padding: 12px 16px;
+            border-radius: 8px; font-size: 16px; width: max-content; max-width: 250px;
+            white-space: normal; pointer-events: none;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Mobilde butona dokunulduğunda metni göster */
+        .Hotspot:focus .HotspotAnnotation,
+        .Hotspot:active .HotspotAnnotation {
+            opacity: 1; visibility: visible;
+        }
+
+        /* AR Butonu Hizalama Düzeltmesi */
+        #ar-button {
+            position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+            background-color: white; border-radius: 8px; padding: 10px 20px;
+            font-weight: bold; font-family: sans-serif; cursor: pointer; border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
     </style>
 </head>
 <body>
 
+<!-- ID: ar-sahne eklendi. JS bu ID'yi arıyor -->
 <model-viewer 
+    id="ar-sahne"
     src="renklikalp.glb" 
-    style="width: 100%; height: 100vh;"
+    style="width: 100vw; height: 100vh;"
     ar 
     ar-modes="webxr scene-viewer quick-look" 
     camera-controls 
     tone-mapping="neutral" 
     environment-image="neutral" 
     exposure="1.2" 
-    poster="poster.webp" 
     shadow-intensity="1">
     
     <button class="Hotspot" slot="hotspot-1" data-position="-0.10571576626445855m 0.40000702011549927m 0.057633221900686316m" data-normal="-0.7285922970594364m -0.31771914021612574m 0.6068012958176506m" data-visibility-attribute="visible">
@@ -51,48 +82,12 @@
         <div class="HotspotAnnotation">4. Bölüm</div>
     </button>
     
-    <div class="progress-bar hide" slot="progress-bar">
-        <div class="update-bar"></div>
-    </div>
-    
     <button slot="ar-button" id="ar-button">
         AR'da Gör
     </button>
-    
-    <div id="ar-prompt">
-        <img src="https://modelviewer.dev/shared-assets/icons/hand.png">
-    </div>
 </model-viewer>
     
-    
-    <div id="bilgi-kutusu">Model Yükleniyor...</div>
+<div id="bilgi-kutusu">360° inceleyin veya AR'da görün!</div>
 
-    <script>
-        // 1. URL'den 'id' değerini al (Örn: ?id=tugla_kalp)
-        const urlParams = new URLSearchParams(window.location.search);
-        const modelId = urlParams.get('id');
-        
-        const viewer = document.getElementById('ar-sahne');
-        const bilgi = document.getElementById('bilgi-kutusu');
-
-        // 2. Doğru 3D Modeli Yükle
-        if (modelId) {
-            viewer.src = `assets/${modelId}.glb`;
-            bilgi.innerText = "360° inceleyin veya AR'da görün!";
-        } else {
-            bilgi.innerText = "Lütfen sergideki bir QR kodu okutun.";
-        }
-
-        // 3. Dokunma (Tıklama) Etkileşimi
-        viewer.addEventListener('click', () => {
-            // Modeli tıklayınca bir ses çalmak için (assets klasörüne ses.mp3 eklerseniz):
-            // const ses = new Audio('assets/ses.mp3');
-            // ses.play();
-            
-            // Kullanıcıya küçük bir bildirim gösterelim
-            bilgi.innerText = "Tebrikler! Etkileşim başarılı.";
-            setTimeout(() => { bilgi.innerText = "360° inceleyin veya AR'da görün!"; }, 3000);
-        });
-    </script>
 </body>
 </html>
