@@ -120,6 +120,7 @@
 <model-viewer 
     id="ar-sahne"
     src="assets/renklikalp.glb" 
+    autoplay
     style="width: 100vw; height: 100vh;"
     ar 
     ar-modes="webxr scene-viewer quick-look" 
@@ -151,6 +152,21 @@
 </model-viewer>
     
 <div id="bilgi-kutusu">Gerçek boyutta görmek için butona basın.</div>
+    <!-- Gizli Ses Oynatıcı -->
+<audio id="kalp-sesi" src="assets/kalp-sesi.mp3" loop preload="auto"></audio>
+
+<script>
+    // Kullanıcı ekranın neresine dokunursa dokunsun, sesi başlatır ve döngüye sokar
+    const kalpSesi = document.getElementById('kalp-sesi');
+    
+    document.body.addEventListener('click', function baslat() {
+        kalpSesi.play().catch(error => {
+            console.log("Ses oynatma engellendi, tekrar deneniyor...");
+        });
+        // Sadece ilk dokunuşta tetiklenmesi için dinleyiciyi kaldırıyoruz
+        document.body.removeEventListener('click', baslat);
+    });
+</script>
 
 </body>
 </html>
